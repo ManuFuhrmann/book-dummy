@@ -1,0 +1,17 @@
+{
+    "name": "manuel/core",
+    "autoload": {
+        "psr-4": {
+            "Manuel\\Core\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Manuel Fuhrmann",
+            "email": "manu.fuhrmann@arcor.de"
+        }
+    ],
+    "require": {
+        "phpunit/phpunit": "^9.5"
+    }
+}
