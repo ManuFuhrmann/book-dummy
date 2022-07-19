@@ -2,9 +2,9 @@
 
 namespace Manuel\Core\Classes;
 
-use Manuel\Core\Interfaces\Connection;
+use Manuel\Core\Interfaces\IConnection;
 
-class FileConnection implements Connection
+class ConnectionFile implements IConnection
 {
     private $filePath = '';
     private $data = array();
@@ -63,7 +63,7 @@ class FileConnection implements Connection
         return array_search($data, $fileContent[$group]);
     }
 
-    public function update(string $group, array $data, array $where): int
+    public function update(string $group, array $data, array $where = array()): int
     {
         $fileContent = $this->readFile();
         $changedCounter = 0;
@@ -83,7 +83,7 @@ class FileConnection implements Connection
         return $changedCounter;
     }
 
-    public function delete(string $group, array $where): int
+    public function delete(string $group, array $where = array()): int
     {
         $fileContent = $this->readFile();
         $changedCounter = 0;

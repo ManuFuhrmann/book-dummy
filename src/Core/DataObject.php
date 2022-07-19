@@ -1,10 +1,10 @@
 <?php
 
-namespace Manuel\Core\Classes;
+namespace Manuel\Core;
 
-use Manuel\Core\Interfaces\Connection;
+use Manuel\Interfaces\Connection;
 
-class DataObject
+abstract class DataObject
 {
     protected Connection $connection;
 

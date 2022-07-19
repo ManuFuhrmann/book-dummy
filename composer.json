@@ -2,7 +2,7 @@
     "name": "manuel/core",
     "autoload": {
         "psr-4": {
-            "Manuel\\Core\\": "src/"
+            "Manuel\\": "src/"
         }
     },
     "authors": [
@@ -12,6 +12,11 @@
         }
     ],
     "require": {
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "php": ">=8.1",
+        "php-di/php-di": "^6.0",
+        "nikic/fast-route": "~0.5.0",
+        "mnapoli/silly": "^1.7",
+        "twig/twig": "^3.2"
     }
 }

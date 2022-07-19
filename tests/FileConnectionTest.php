@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Manuel\Core\Classes\FileConnection;
+use Manuel\Core\Classes\ConnectionFile;
 
 class FileConnectionTest extends TestCase
 {
@@ -18,7 +18,7 @@ class FileConnectionTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->connection = new FileConnection(self::$filePath);
+        $this->connection = new ConnectionFile(self::$filePath);
         //call before every test function
     }
 
