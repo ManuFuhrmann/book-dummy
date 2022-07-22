@@ -3,6 +3,8 @@
 namespace Manuel\Core\Classes;
 
 use Manuel\Core\Interfaces\IConnection;
+use Manuel\Core\Interfaces\IEntity;
+use Manuel\Core\PrimaryKey;
 
 class ConnectionFile implements IConnection
 {
@@ -35,7 +37,7 @@ class ConnectionFile implements IConnection
     /**
      * @throws \Exception
      */
-    public function select(string $group, array $data = array(), array $where = array(), array $order = array(), int $limit = -1, int $offset = 0): array
+    public function select(string $group, array $data = array(), array $where = array(), array $order = array(), int $limit = -1, int $offset = 0): IEntity
     {
         $fileContent = $this->readFile();
         $aReturn = array();
@@ -55,7 +57,7 @@ class ConnectionFile implements IConnection
         return $aReturn;
     }
 
-    public function insert(string $group, array $data): int
+    public function insert(string $group, array $data): PrimaryKey
     {
         $fileContent = $this->readFile();
         $fileContent[$group][] = $data;
@@ -63,7 +65,7 @@ class ConnectionFile implements IConnection
         return array_search($data, $fileContent[$group]);
     }
 
-    public function update(string $group, array $data, array $where = array()): int
+    public function update(string $group, array $data, array $where = array()): PrimaryKey
     {
         $fileContent = $this->readFile();
         $changedCounter = 0;
@@ -83,7 +85,7 @@ class ConnectionFile implements IConnection
         return $changedCounter;
     }
 
-    public function delete(string $group, array $where = array()): int
+    public function delete(string $group, array $where = array()): PrimaryKey
     {
         $fileContent = $this->readFile();
         $changedCounter = 0;

@@ -5,6 +5,7 @@ namespace Manuel\Infrastructure;
 use Manuel\Core\Interfaces\IConnection;
 use Manuel\Core\Interfaces\IEntity;
 use Manuel\Core\Interfaces\IRepository;
+use Manuel\Core\PrimaryKey;
 use Manuel\Domain\EntityInvoiceTemplate;
 
 
@@ -43,12 +44,12 @@ final class RepositoryMemoryInvoiceTemplate implements IRepository
         return $entity->getId();
     }
 
-    public function getById(int $primKey): IEntity
+    public function getById(PrimaryKey $primKey): IEntity
     {
-        return $this->memory[$primKey];
+        return $this->memory[$primKey->getId()];
     }
 
-    public function nextIdentity(): string
+    public function nextIdentity(): PrimaryKey
     {
         return count($this->memory);
     }

@@ -9,7 +9,7 @@ use Manuel\Core\Interfaces\IEntity;
 use Manuel\Core\PrimaryKey;
 use Manuel\Domain\EntityInvoice;
 
-final class RepositorySqlInvoiceTemplate implements IRepository
+final class RepositoryDoctrineInvoiceTemplate implements IRepository
 {
     private IConnection $connection;
 

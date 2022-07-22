@@ -5,8 +5,7 @@
 
 use DI\ContainerBuilder;
 
-require __DIR__ . '/../vendor/autoload.php';
-
+//simple DI
 $containerBuilder = new ContainerBuilder;
 $containerBuilder->addDefinitions(__DIR__ . '/config.php');
 $container = $containerBuilder->build();

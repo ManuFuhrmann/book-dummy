@@ -3,6 +3,8 @@
 namespace Manuel\Infrastructure;
 
 use Manuel\Core\Interfaces\IConnection;
+use Manuel\Core\Interfaces\IEntity;
+use Manuel\Core\PrimaryKey;
 use PDO;
 
 class ConnectionMySql implements IConnection
@@ -20,7 +22,7 @@ class ConnectionMySql implements IConnection
         $this->database = new PDO('mysql:dbname='.$dbname.';host='.$host.';charset=utf8', $user, $password, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET time_zone = 'Europe/Berlin';"));
     }
 
-    public function insert(string $group, array $data): int
+    public function insert(string $group, array $data): PrimaryKey
     {
         $keys = array_keys($data);
         $values = array_keys($data);
@@ -32,7 +34,7 @@ class ConnectionMySql implements IConnection
         return $this->database->lastInsertId();
     }
 
-    public function select(string $group, array $data = array(), array $where = array(), array $order = array(), int $limit = -1, int $offset = 0): array
+    public function select(string $group, array $data = array(), array $where = array(), array $order = array(), int $limit = -1, int $offset = 0): IEntity
     {
         if (!empty($data)) {
             $sqlSELECT = 'SELECT ' . implode(', ', array_values($data)) . ' FROM ' . $group;
@@ -72,7 +74,7 @@ class ConnectionMySql implements IConnection
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function update(string $group, array $data, array $where = array()): int
+    public function update(string $group, array $data, array $where = array()): PrimaryKey
     {
         $sqlUPDATE = 'UPDATE ' . $group;
         $sqlSET = ' SET name=?, surname=?, sex=?';
@@ -93,7 +95,7 @@ class ConnectionMySql implements IConnection
         return $stmt->execute();
     }
 
-    public function delete(string $group, array $where = array()): int
+    public function delete(string $group, array $where = array()): PrimaryKey
     {
         $sqlDELETE = 'DELETE FROM ' .$group;
         $sqlWHERE = '';

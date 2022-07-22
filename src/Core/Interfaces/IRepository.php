@@ -4,6 +4,7 @@ namespace Manuel\Core\Interfaces;
 
 use Manuel\Core\Exceptions\CouldNotCreateInvoice;
 use Manuel\Core\Exceptions\CouldNotFindInvoice;
+use Manuel\Core\PrimaryKey;
 
 interface IRepository
 {
@@ -19,8 +20,8 @@ interface IRepository
     /**
     * @throws CouldNotFindInvoice
     */
-    public function getById(int $primKey): IEntity;
+    public function getById(PrimaryKey $primKey): IEntity;
 
-    public function nextIdentity(): int;
+    public function nextIdentity(): PrimaryKey;
 
 }

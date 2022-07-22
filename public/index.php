@@ -2,6 +2,16 @@
 
 use FastRoute\RouteCollector;
 
+//composer packages
+require __DIR__ . '/../vendor/autoload.php';
+
+
+//dotenv
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . DIRECTORY_SEPARATOR . '..');
+$dotenv->load();
+
+
+//php-di
 $container = require __DIR__ . '/../app/bootstrap.php';
 
 $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) {

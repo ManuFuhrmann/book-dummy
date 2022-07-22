@@ -5,7 +5,9 @@ namespace Manuel\Core\Controller;
 
 use Manuel\Core\Interfaces\IRepository;
 use Manuel\Core\Interfaces\IResponse;
+use Manuel\Core\PrimaryKey;
 use Manuel\Domain\ResponseHtml;
+use Manuel\PrimaryKeyStandard;
 
 class ControllerInvoiceTemplate
 {
@@ -16,7 +18,8 @@ class ControllerInvoiceTemplate
 
     public function getData(string $id): IResponse
     {
-        $invoiceTemplate = $this->repository->getById($id);
+        $primKey = new PrimaryKeyStandard($id);
+        $invoiceTemplate = $this->repository->getById($primKey);
 
         $sInvoiceTemplate = array();
         foreach($invoiceTemplate->asArray() as $key => $value) {
