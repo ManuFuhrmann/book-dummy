@@ -36,12 +36,12 @@ class ConnectionDoctrine implements \Manuel\Core\Interfaces\IConnection
         $this->entityManager = EntityManager::create($conn, $config);
     }
 
-    public function select(string $group, array $data = array(), array $where = array(), array $order = array(), int $limit = -1, int $offset = 0): IEntity
+    public function select(string $group, array $where = array(), array $order = array(), int $limit = -1, int $offset = 0): array
     {
         return $this->entityManager->getRepository($group)->findBy($where);
     }
 
-    public function insert(string $group, array $data): PrimaryKey
+    public function insert(string $group, IEntity $data): PrimaryKey
     {
         $product = new $group;
 
@@ -51,7 +51,7 @@ class ConnectionDoctrine implements \Manuel\Core\Interfaces\IConnection
         return $group->getPK();
     }
 
-    public function update(string $group, array $data, array $where = array()): PrimaryKey
+    public function update(string $group, array $where = array(), array $data): array
     {
         $product = $this->entityManager->find($group, $where['id']);
 
@@ -66,7 +66,7 @@ class ConnectionDoctrine implements \Manuel\Core\Interfaces\IConnection
         return $group->getPK();
     }
 
-    public function delete(string $group, array $where = array()): PrimaryKey
+    public function delete(string $group, array $where = array()): int
     {
         $single_user = $this->entityManager->getReference($group, $where['id']);
 

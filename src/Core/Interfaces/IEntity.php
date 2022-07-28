@@ -9,5 +9,6 @@ interface IEntity
 {
     public function __construct(array $raw = array());
     public function getPK(): PrimaryKey;
+    public function setPK(PrimaryKey $primaryKey);
     public function asArray(): array;
 }

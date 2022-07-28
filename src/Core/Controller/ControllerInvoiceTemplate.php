@@ -5,9 +5,8 @@ namespace Manuel\Core\Controller;
 
 use Manuel\Core\Interfaces\IRepository;
 use Manuel\Core\Interfaces\IResponse;
-use Manuel\Core\PrimaryKey;
+use Manuel\Core\PrimaryKeyStandard;
 use Manuel\Domain\ResponseHtml;
-use Manuel\PrimaryKeyStandard;
 
 class ControllerInvoiceTemplate
 {

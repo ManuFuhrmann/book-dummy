@@ -1,16 +1,20 @@
 <?php
 
-namespace Manuel\Core\Classes;
+namespace Manuel\Infrastructure;
 
 use Manuel\Core\Interfaces\IConnection;
 use Manuel\Core\Interfaces\IEntity;
 use Manuel\Core\PrimaryKey;
+use Manuel\Core\PrimaryKeyStandard;
 
 class ConnectionFile implements IConnection
 {
     private $filePath = '';
     private $data = array();
 
+    /**
+     * @throws \Exception
+     */
     public function __construct($filePath)
     {
         if (file_exists($filePath)) {
@@ -18,6 +22,11 @@ class ConnectionFile implements IConnection
         } else {
             throw new \Exception('Data file cannot be read');
         }
+    }
+
+    public function getAllData()
+    {
+        $fileContent = $this->readFile();
     }
 
     protected function readFile()
@@ -37,7 +46,7 @@ class ConnectionFile implements IConnection
     /**
      * @throws \Exception
      */
-    public function select(string $group, array $data = array(), array $where = array(), array $order = array(), int $limit = -1, int $offset = 0): IEntity
+    public function select(string $group, array $where = array(), array $order = array(), int $limit = -1, int $offset = 0): array
     {
         $fileContent = $this->readFile();
         $aReturn = array();
@@ -45,7 +54,7 @@ class ConnectionFile implements IConnection
             foreach ($fileContent[$group] as $contentValue) {
                 $found = true;
                 foreach ($where as $whereKey => $whereValue) {
-                    $found = ($found and $contentValue[$whereKey] == $whereValue);
+                    $found = ($found and $contentValue->{'get'.ucfirst($whereKey)}() == $whereValue);
                 }
                 if ($found) {
                     $aReturn[] = $contentValue;
@@ -57,49 +66,58 @@ class ConnectionFile implements IConnection
         return $aReturn;
     }
 
-    public function insert(string $group, array $data): PrimaryKey
+    public function insert(string $group, IEntity $data): PrimaryKey
     {
         $fileContent = $this->readFile();
+        $lastEntryPk = 0;
+        if (!empty($fileContent[$group])) {
+            $lastEntry = end($fileContent[$group]);
+            $lastEntryPk = $lastEntry->getPk()->getId()+1;
+        }
+        $data->setPK(new PrimaryKeyStandard($lastEntryPk));
         $fileContent[$group][] = $data;
         $this->writeFile($fileContent);
-        return array_search($data, $fileContent[$group]);
+        return new PrimaryKeyStandard(array_search($data, $fileContent[$group]));
     }
 
-    public function update(string $group, array $data, array $where = array()): PrimaryKey
+    public function update(string $group, array $where = array(), array $data): array
     {
         $fileContent = $this->readFile();
-        $changedCounter = 0;
+        $changedArray = array();
+
         foreach ($fileContent[$group] as $contentKey => &$contentValue) {
             $found = true;
             foreach ($where as $whereKey => $whereValue) {
-                $found = ($found and $contentValue[$whereKey] == $whereValue);
+                $found = ($found and $contentValue->{'get'.ucfirst($whereKey)}() == $whereValue);
             }
             if ($found) {
-                $changedCounter++;
+                $changedArray[] = $contentValue;
                 foreach ($data as $dataKey => $dataValue) {
-                    $contentValue[$dataKey] = $dataValue;
+                    $contentValue->{'set'.ucfirst($dataKey)}($dataValue);
                 }
             }
         }
         $this->writeFile($fileContent);
-        return $changedCounter;
+        return $changedArray;
     }
 
-    public function delete(string $group, array $where = array()): PrimaryKey
+    public function delete(string $group, array $where = array()): int
     {
         $fileContent = $this->readFile();
-        $changedCounter = 0;
+        $changedCount = 0;
+
         foreach ($fileContent[$group] as $contentKey => &$contentValue) {
             $found = true;
             foreach ($where as $whereKey => $whereValue) {
-                $found = ($found and $contentValue[$whereKey] == $whereValue);
+                $found = ($found and $contentValue->{'get'.ucfirst($whereKey)}() == $whereValue);
             }
             if ($found) {
-                $changedCounter++;
+                $changedCount++;
                 unset($fileContent[$group][$contentKey]);
             }
         }
+
         $this->writeFile($fileContent);
-        return $changedCounter;
+        return $changedCount;
     }
 }
